@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bible Verse Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+        }
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Bible Verse Finder</h2>
+
+<input type="text" id="book" placeholder="Book (e.g. John)">
+<input type="number" id="chapter" placeholder="Chapter (e.g. 3)">
+<input type="number" id="verse" placeholder="Verse (e.g. 16)">
+
+<button onclick="getVerse()">Get Verse</button>
+
+<div id="result"></div>
+
+<script>
+function getVerse() {
+    const book = document.getElementById("book").value;
+    const chapter = document.getElementById("chapter").value;
+    const verse = document.getElementById("verse").value;
+
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = "Loading...";
+
+    fetch(`/verse/${book}/${chapter}/${verse}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Verse not found");
+            }
+            return response.json();
+        })
+        .then(data => {
+            resultDiv.innerHTML = `
+                <strong>${data.reference}</strong><br>
+                ${data.text}
+            `;
+        })
+        .catch(error => {
+            resultDiv.innerHTML = "Error: " + error.message;
+        });
+}
+</script>
+
+</body>
+</html>

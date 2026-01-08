@@ -14,3 +14,5 @@ def hello():
     return {"message":"Hello Dosto"}
 
 app.include_router(routes.router)
+
+app.include_router(routes.router)
